@@ -1,0 +1,10 @@
+language: python
+
+services:
+  - docker
+
+install:
+  - docker build -t whois-docker . --no-cache
+
+script:
+  - docker run --rm -it whois-docker --version | grep "Version 5.2.20"

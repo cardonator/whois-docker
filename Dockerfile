@@ -12,4 +12,4 @@ RUN apk add --no-cache --update --virtual .build-deps build-base wget perl unzip
     && make CFLAGS="-DHAVE_GETOPT_LONG -DHAVE_GETADDRINFO -DHAVE_SHA_CRYPT" && make install && cd /tmp && rm -rf /tmp/whois-next \
     && apk del .build-deps
 
-ENTRYPOINT [ "/bin/sh" ]
+ENTRYPOINT [ "/usr/bin/whois" ]
