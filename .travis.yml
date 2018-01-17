@@ -20,6 +20,6 @@ script:
   - docker run --rm -it whois-docker --version | grep "Version 5.2.20"
 
 after_success:
-  - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+  - docker login -u $DOCKER_USER -p $DOCKER_PASS
   - docker tag whois-docker cardonator/whois:latest
   - docker push cardonator/whois
