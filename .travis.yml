@@ -17,7 +17,7 @@ install:
   - docker build -t whois-docker . --no-cache
 
 script:
-  - docker run --rm -it whois-docker --version | grep "Version 5.3.1"
+  - docker run --rm -it whois-docker --version | grep "Version 5.3.2"
 
 after_success:
   - docker login -u $DOCKER_USER -p $DOCKER_PASS
