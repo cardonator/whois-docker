@@ -8,16 +8,23 @@ on:
 
 jobs:
 
-  build:
-
+  build-and-push-image:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
     steps:
-    - uses: oprypin/find-latest-tag@v1
-      with:
-        repository: rfc1036/whois
-      id: whois  # The step ID to refer to later.
+      - uses: oprypin/find-latest-tag@v1
+        with:
+          repository: rfc1036/whois
+        id: whois  # The step ID to refer to later.
     
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag whois:${{ steps.whois.outputs.tag }}
+      - uses: actions/checkout@v3
+      
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: "."
+          push: true
+          tags: cardonator/whois-docker:latest,cardonator/whois-docker:${{ steps.whois.outputs.tag }}
