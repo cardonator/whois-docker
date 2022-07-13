@@ -1,0 +1,23 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: oprypin/find-latest-tag@v1
+      with:
+        repository: rfc1036/whois
+      id: whois  # The step ID to refer to later.
+    
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag whois:${{ steps.whois.outputs.tag }}
