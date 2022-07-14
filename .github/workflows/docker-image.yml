@@ -29,9 +29,16 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
           
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: cardonator
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
           context: "."
           push: true
-          tags: ghcr.io/cardonator/whois-docker:latest,ghcr.io/cardonator/whois-docker:${{ steps.whois.outputs.tag }}
+          tags: cardonator/whois:latest,cardonator/whois:${{ steps.whois.outputs.tag }},ghcr.io/cardonator/whois-docker:latest,ghcr.io/cardonator/whois-docker:${{ steps.whois.outputs.tag }}
