@@ -15,7 +15,7 @@ RUN make CFLAGS="-DHAVE_GETOPT_LONG -DHAVE_GETADDRINFO -DHAVE_SHA_CRYPT" \
 RUN grep "whois" /etc/services > /tmp/services
 
 
-FROM scratch
+FROM scratch as whois
 
 COPY --from=build /usr/bin/whois /usr/local/bin/whois
 COPY --from=build /usr/lib/libintl.so.8 /usr/lib/libintl.so.8
@@ -24,3 +24,11 @@ COPY --from=build /tmp/services /etc/services
 
 
 ENTRYPOINT ["/usr/local/bin/whois"]
+
+FROM scratch as mkpasswd
+
+COPY --from=build /usr/bin/mkpasswd /usr/local/bin/mkpasswd
+COPY --from=build /usr/lib/libintl.so.8 /usr/lib/libintl.so.8
+COPY --from=build /lib/ld-musl-x86_64.so.1 /lib/ld-musl-x86_64.so.1
+
+ENTRYPOINT ["/usr/local/bin/mkpasswd"]

@@ -35,9 +35,18 @@ jobs:
           username: cardonator
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           
-      - name: Build and push
+      - name: Build and push whois docker
         uses: docker/build-push-action@v3
         with:
           context: "."
+          target: whois
           push: true
           tags: cardonator/whois:latest,cardonator/whois:${{ steps.whois.outputs.tag }},ghcr.io/cardonator/whois-docker:latest,ghcr.io/cardonator/whois-docker:${{ steps.whois.outputs.tag }}
+
+      - name: Build and push mkpasswd docker
+        uses: docker/build-push-action@v3
+        with:
+          context: "."
+          target: mkpasswd
+          push: true
+          tags: cardonator/mkpasswd:latest,cardonator/mkpasswd:${{ steps.whois.outputs.tag }},ghcr.io/cardonator/whois-docker:mkpasswd-latest,ghcr.io/cardonator/whois-docker:mkpasswd-${{ steps.whois.outputs.tag }}
