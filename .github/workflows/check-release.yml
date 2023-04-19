@@ -1,0 +1,37 @@
+name: Get latest kavita release
+on:
+  schedule:
+    - cron: '0 10 * * *'
+  workflow_dispatch:
+
+jobs:
+  get-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Compare releases
+        id: compare-releases
+        uses: NickLiffen/compare-releases@v2.0.4
+        with:
+          destinationRepository: rfc1036/whois
+          sourceRepository: cardonator/whois-docker
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: mukunku/tag-exists-action@v1.2.0
+        id: checkTag
+        with: 
+          tag: ${{ steps.compare-releases.outputs.tagName }}
+      - name: Bump version and push tag
+        id: tag_version
+        if: steps.checkTag.outputs.exists == 'false'
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.ACTIONS_PAT }}
+          custom_tag: ${{ steps.compare-releases.outputs.tagName }}
+          tag_prefix: ''
+      - name: Create a GitHub release
+        if: steps.checkTag.outputs.exists == 'false'
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
+          token: ${{ secrets.ACTIONS_PAT }}
