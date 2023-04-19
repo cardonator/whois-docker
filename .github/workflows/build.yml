@@ -34,7 +34,7 @@ jobs:
         with:
           images: |
             name=cardonator/whois
-            name=ghcr.io/${{ github.repository }}
+            name=ghcr.io/cardonator/whois
       
       - name: Build and push Docker images
         uses: docker/build-push-action@v4
